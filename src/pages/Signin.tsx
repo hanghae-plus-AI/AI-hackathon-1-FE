@@ -8,12 +8,26 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from "axios"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Signin() {
   const [id, setId] = useState("")
   const [password, setPassword] = useState("")
-
+  const navigate = useNavigate()
+  
+  const onSubmit = ()=> {
+    axios.post('https://koitbuddy.org/user/login', {
+      "user_id":id,
+      password
+    }).then(res => {
+      if (res.status === 200) {
+        localStorage.setItem("cid", res.data.id)
+        navigate('/')
+      }
+    })
+  }
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -54,7 +68,7 @@ export default function Signin() {
         </div>
       </CardContent>
       <CardFooter className="w-full">
-        <Button variant="outline" className="w-full rounded-full">
+        <Button variant="outline" className="w-full rounded-full" onClick={onSubmit}>
           로그인
         </Button>
       </CardFooter>

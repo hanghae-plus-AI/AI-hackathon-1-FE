@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/select"
 import { Slider } from "@/components/ui/slider"
 import { Textarea } from "@/components/ui/textarea"
+import axios from "axios"
 
-import { useState } from "react"
+import { FormEvent, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 export default function Signup() {
   const [id, setId] = useState("")
@@ -31,6 +33,27 @@ export default function Signup() {
   const [job, setJob] = useState("")
   const [furtherDetails, setFurtherDetails] = useState("")
 
+  const navigate = useNavigate()
+  
+  const onSubmit = (evt: FormEvent) => {
+    evt.preventDefault()
+    const user = {
+      user_id: id,
+      password,
+      name,
+      age,
+      gender,
+      workLifeRatio: `${workLifeRatio[0]}:${100 - workLifeRatio[0]}`,
+      job,
+      furtherDetails
+  }
+    axios.post('https://koitbuddy.org/user/signup', user).then((res)=>{
+      if(res.status === 200) {
+        localStorage.setItem('usrid', id)
+        navigate('/main')
+      }
+    })
+  }
   return (
     <Card className="w-[350px]">
       <CardHeader>
@@ -142,7 +165,7 @@ export default function Signup() {
         </div>
       </CardContent>
       <CardFooter className="w-full">
-        <Button variant="outline" className="w-full rounded-full">
+        <Button variant="outline" className="w-full rounded-full" onClick={onSubmit}>
           회원가입
         </Button>
       </CardFooter>
