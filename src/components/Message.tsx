@@ -1,4 +1,4 @@
-const Message = ({ notification }) => {
+const Message = ({ notification }:{notification: {image: string, title: string, body:string}} ) => {
   return (
     <>
       <div id="notificationHeader">

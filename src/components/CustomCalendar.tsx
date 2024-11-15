@@ -7,8 +7,7 @@ import { addDate, addHours, subtractDate } from './date'
 
 import Calendar from '@toast-ui/react-calendar'
 import { theme } from '@/theme'
-import { TZDate, type EventObject, type ExternalEventTypes, type Options } from '@toast-ui/calendar'
-import { toast } from 'sonner'
+import { TZDate, type EventObject, type ExternalEventTypes } from '@toast-ui/calendar'
 
 type ViewType = 'month' | 'week' | 'day'
 
@@ -32,7 +31,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
   const calendarRef = useRef<typeof Calendar>(null)
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('')
   const [selectedView, setSelectedView] = useState(view)
-  const [events, setEvents] = useState<Partial<EventObject>[]>([])
+  // const [events, setEvents] = useState<Partial<EventObject>[]>([])
 
   const initialEvents: Partial<EventObject>[] = [
     {
