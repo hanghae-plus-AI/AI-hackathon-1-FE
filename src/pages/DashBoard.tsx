@@ -1,6 +1,6 @@
 import CustomCalendar from '@/components/CustomCalendar'
 import { useEffect } from "react"
-import { handleAllowNotification } from "../lib/notificationPermission.js"
+import { handleAllowNotification } from "../lib/notificationPermission"
 
 export default function DashBoard() {
   useEffect(() => {
