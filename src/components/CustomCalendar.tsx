@@ -1,26 +1,29 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { ChangeEvent, MouseEvent } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
+import type { MouseEvent } from 'react'
+import '@toast-ui/calendar/dist/toastui-calendar.min.css'
+
+import { addDate, addHours, subtractDate } from './date'
+
 import Calendar from '@toast-ui/react-calendar'
 import { theme } from '@/theme'
 import { TZDate, type EventObject, type ExternalEventTypes, type Options } from '@toast-ui/calendar'
-import { addDate, addHours, subtractDate } from './date'
-
-import '@toast-ui/calendar/dist/toastui-calendar.min.css'
+import { toast } from 'sonner'
 
 type ViewType = 'month' | 'week' | 'day'
 
 const today = new TZDate()
 const viewModeOptions = [
   {
-    title: 'Monthly',
+    title: '월',
     value: 'month'
   },
   {
-    title: 'Weekly',
+    title: '주',
     value: 'week'
   },
   {
-    title: 'Daily',
+    title: '일',
     value: 'day'
   }
 ]
@@ -29,26 +32,12 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
   const calendarRef = useRef<typeof Calendar>(null)
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('')
   const [selectedView, setSelectedView] = useState(view)
-  const initialCalendars: Options['calendars'] = [
-    {
-      id: '0',
-      name: 'Private',
-      backgroundColor: '#9e5fff',
-      borderColor: '#9e5fff',
-      dragBackgroundColor: '#9e5fff'
-    },
-    {
-      id: '1',
-      name: 'Company',
-      backgroundColor: '#00a9ff',
-      borderColor: '#00a9ff',
-      dragBackgroundColor: '#00a9ff'
-    }
-  ]
+  const [events, setEvents] = useState<Partial<EventObject>[]>([])
+
   const initialEvents: Partial<EventObject>[] = [
     {
       id: '1',
-      calendarId: '0',
+      calendarId: 'work',
       title: 'TOAST UI Calendar Study',
       category: 'time',
       start: today,
@@ -56,25 +45,24 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
     },
     {
       id: '2',
-      calendarId: '0',
+      calendarId: 'life',
       title: 'Practice',
       category: 'milestone',
       start: addDate(today, 1),
-      end: addDate(today, 1),
-      isReadOnly: true
+      end: addDate(today, 1)
     },
     {
       id: '3',
-      calendarId: '0',
+      calendarId: 'work',
       title: 'FE Workshop',
       category: 'allday',
       start: subtractDate(today, 2),
-      end: subtractDate(today, 1),
-      isReadOnly: true
+      end: subtractDate(today, 1)
     },
+
     {
       id: '4',
-      calendarId: '0',
+      calendarId: 'life',
       title: 'Report',
       category: 'time',
       start: today,
@@ -104,7 +92,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
 
     switch (viewName) {
       case 'month': {
-        dateRangeText = `${year}-${month}`
+        dateRangeText = `${year}년 ${month}월`
         break
       }
       case 'week': {
@@ -114,15 +102,15 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
         const endMonth = rangeEnd.getMonth() + 1
         const endDate = rangeEnd.getDate()
 
-        const start = `${year}-${month < 10 ? '0' : ''}${month}-${date < 10 ? '0' : ''}${date}`
-        const end = `${year}-${endMonth < 10 ? '0' : ''}${endMonth}-${
+        const start = `${year}년 ${month < 10 ? '0' : ''}${month}월 ${date < 10 ? '0' : ''}${date}일`
+        const end = `${year}년 ${endMonth < 10 ? '0' : ''}${endMonth}월 ${
           endDate < 10 ? '0' : ''
-        }${endDate}`
+        }${endDate}일`
         dateRangeText = `${start} ~ ${end}`
         break
       }
       default:
-        dateRangeText = `${year}-${month}-${date}`
+        dateRangeText = `${year}년 ${month}월 ${date}일`
     }
 
     setSelectedDateRangeText(dateRangeText)
@@ -136,12 +124,15 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
     updateRenderRangeText()
   }, [selectedView, updateRenderRangeText])
 
+  // TODO: 수정 API + sonner success
   const onAfterRenderEvent: ExternalEventTypes['afterRenderEvent'] = (res) => {
     console.group('onAfterRenderEvent')
-    console.log('Event Info : ', res.title)
+    console.log()
+    console.log('Event Info : ', res)
     console.groupEnd()
   }
 
+  // TODO: 삭제 API + sonner succe
   const onBeforeDeleteEvent: ExternalEventTypes['beforeDeleteEvent'] = (res) => {
     console.group('onBeforeDeleteEvent')
     console.log('Event Info : ', res.title)
@@ -152,7 +143,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
     getCalInstance().deleteEvent(id, calendarId)
   }
 
-  const onChangeSelect = (ev: ChangeEvent<HTMLSelectElement>) => {
+  const onChangeSelect = (ev: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedView(ev.target.value as ViewType)
   }
 
@@ -204,10 +195,10 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
     getCalInstance().updateEvent(targetEvent.id, targetEvent.calendarId, changes)
   }
 
+  // TODO: 등록 API + sonner success
   const onBeforeCreateEvent: ExternalEventTypes['beforeCreateEvent'] = (eventData) => {
     const event = {
       calendarId: eventData.calendarId || '',
-      id: String(Math.random()),
       title: eventData.title,
       isAllday: eventData.isAllday,
       start: eventData.start,
@@ -222,49 +213,68 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
     getCalInstance().createEvents([event])
   }
 
+  useEffect(() => {}, [])
+
   return (
     <div>
       <div>
-        <select onChange={onChangeSelect} value={selectedView}>
-          {viewModeOptions.map((option, index) => (
-            <option value={option.value} key={index}>
-              {option.title}
-            </option>
-          ))}
-        </select>
-        <span>
-          <button
-            type="button"
-            className="btn btn-default btn-sm move-today"
-            data-action="move-today"
-            onClick={onClickNavi}
-          >
-            Today
-          </button>
-          <button
-            type="button"
-            className="btn btn-default btn-sm move-day"
-            data-action="move-prev"
-            onClick={onClickNavi}
-          >
-            Prev
-          </button>
-          <button
-            type="button"
-            className="btn btn-default btn-sm move-day"
-            data-action="move-next"
-            onClick={onClickNavi}
-          >
-            Next
-          </button>
-        </span>
-        <span className="render-range">{selectedDateRangeText}</span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <span className="render-range">{selectedDateRangeText}</span>
+            <span>
+              <button
+                type="button"
+                className="move-prev bg-white"
+                data-action="move-prev"
+                onClick={onClickNavi}
+              >
+                <ChevronLeft />
+              </button>
+              <button
+                type="button"
+                className="move-next bg-white"
+                data-action="move-next"
+                onClick={onClickNavi}
+              >
+                <ChevronRight />
+              </button>
+            </span>
+          </div>
+          <div className="flex items-center justify-center">
+            {viewModeOptions.map((option, index) => (
+              <div
+                key={index}
+                className={`${selectedView === option.value ? 'bg-sub-blue text-white' : 'text-black'} rounded-sm border text-center`}
+              >
+                <label htmlFor={option.value} className="mx-4 my-2">
+                  <input
+                    id={option.value}
+                    type="radio"
+                    name="viewMode"
+                    className="sr-only"
+                    value={option.value}
+                    checked={selectedView === option.value}
+                    onChange={(event) => onChangeSelect(event)}
+                  />
+                  {option.title}
+                </label>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="move-today btn flex items-center justify-center rounded-sm border bg-white"
+              data-action="move-today"
+              onClick={onClickNavi}
+            >
+              오늘
+            </button>
+          </div>
+        </div>
       </div>
       <Calendar
         height="800px"
         defaultView="month"
         view={selectedView}
-        calendars={initialCalendars}
         month={{ startDayOfWeek: 1 }}
         events={initialEvents}
         template={{
@@ -282,11 +292,6 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
               timezoneName: 'Asia/Seoul',
               displayLabel: 'Seoul',
               tooltip: 'UTC+09:00'
-            },
-            {
-              timezoneName: 'Pacific/Guam',
-              displayLabel: 'Guam',
-              tooltip: 'UTC+10:00'
             }
           ]
         }}
