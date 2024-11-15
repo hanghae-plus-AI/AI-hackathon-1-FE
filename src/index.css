@@ -9,7 +9,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -59,7 +58,6 @@ button:focus-visible {
 
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
     background-color: #ffffff;
   }
   a:hover {
@@ -72,57 +70,160 @@ button:focus-visible {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 10% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --background: #fff;
+    --foreground: #646464;
+
+    --primary: #e2195f;
+    --primary-foreground: #fff;
+
+    --card: #fff;
+    --card-foreground: #000;
+
+    --popover: #f4f4f4;
+    --popover-foreground: #000;
+
+    --dropdown: #fff;
+    --dropdown-foreground: #646464;
+
+    --secondary: #d7134b;
+    --secondary-foreground: #000;
+
+    --tertiary: #1a61ff;
+    --tertiary-foreground: #fff;
+
+    --quaternary: #43c5ff;
+    --quaternary-foreground: #fff;
+
+    --quinary: #fff;
+    --quinary-foreground: #000;
+
+    --muted: #f7f7f8;
+    --muted-foreground: #676767;
+
+    --accent: #e2195f;
+    --accent-foreground: #fff;
+
+    --destructive: #ff0000;
+    --destructive-foreground: #fff;
+
+    --notice: #fff0f6;
+    --notice-foreground: #d7134b;
+    --notice-border: #ffbbd5;
+
+    --border: #e8e8e8;
+    --input: #fff;
+    --switch: #e2e8f0;
+    --select: #c5cfe4;
+    --ring: #000;
+
+    --main: #0033a1;
+
+    --sub-indigo: #12124f;
+    --sub-blue: #4b80ec;
+    --sub-gray: #6d7281;
+
+    --light-100: #f5f6fa;
+    --light-50: #f8fafd;
+
+    --gray-64: #646464;
+    --gray-900: #000000;
+    --gray-800: #2a2a2a;
+    --gray-700: #404040;
+    --gray-600: #5a5a5a;
+    --gray-500: #676767;
+    --gray-400: #909090;
+    --gray-300: #dddddd;
+    --gray-200: #e0e0e0;
+    --gray-100: #f6f6f6;
+    --gray-50: #fcfcfc;
+
+    --line-200: #c4cee4;
+    --line-100: #ccd6ec;
+    --line-50: #eaedf1;
+
+    --footer: #f6f6f6;
+
+    --link-active: #e2195f;
+
     --radius: 0.5rem;
   }
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: #fff;
+    --foreground: #646464;
+
+    --primary: #e2195f;
+    --primary-foreground: #fff;
+
+    --card: #fff;
+    --card-foreground: #000;
+
+    --popover: #f4f4f4;
+    --popover-foreground: #000;
+
+    --dropdown: #fff;
+    --dropdown-foreground: #646464;
+
+    --secondary: #d7134b;
+    --secondary-foreground: #000;
+
+    --tertiary: #1a61ff;
+    --tertiary-foreground: #fff;
+
+    --quaternary: #43c5ff;
+    --quaternary-foreground: #fff;
+
+    --quinary: #fff;
+    --quinary-foreground: #000;
+
+    --muted: #f7f7f8;
+    --muted-foreground: #676767;
+
+    --accent: #e2195f;
+    --accent-foreground: #fff;
+
+    --destructive: #ff0000;
+    --destructive-foreground: #fff;
+
+    --notice: #fff0f6;
+    --notice-foreground: #d7134b;
+    --notice-border: #ffbbd5;
+
+    --border: #e8e8e8;
+    --input: #fff;
+    --switch: #e2e8f0;
+    --select: #c5cfe4;
+    --ring: #000;
+
+    --main: #0033a1;
+
+    --sub-indigo: #12124f;
+    --sub-blue: #4b80ec;
+    --sub-gray: #6d7281;
+
+    --light-100: #f5f6fa;
+    --light-50: #f8fafd;
+
+    --gray-64: #646464;
+    --gray-900: #000000;
+    --gray-800: #2a2a2a;
+    --gray-700: #404040;
+    --gray-600: #5a5a5a;
+    --gray-500: #676767;
+    --gray-400: #909090;
+    --gray-300: #dddddd;
+    --gray-200: #e0e0e0;
+    --gray-100: #f6f6f6;
+    --gray-50: #fcfcfc;
+
+    --line-200: #c4cee4;
+    --line-100: #ccd6ec;
+    --line-50: #eaedf1;
+
+    --footer: #f6f6f6;
+
+    --link-active: #e2195f;
+
+    --radius: 0.5rem;
   }
 }
 
@@ -136,7 +237,6 @@ button:focus-visible {
 }
 
 @layer components {
-
   /* 글꼴 */
   @font-face {
     font-family: 'Pretendard';
@@ -197,8 +297,8 @@ button:focus-visible {
       url('https://storage.googleapis.com/asset.dershare.xyz/pub/solarkim/fonts/Pretendard-ExtraBold.eot')
         format('embedded-opentype');
   }
-   /* header */
-   .h1-bold {
+  /* header */
+  .h1-bold {
     @apply font-PretendardBold text-[60px] leading-none max-pc:text-[32px] !important;
   }
 

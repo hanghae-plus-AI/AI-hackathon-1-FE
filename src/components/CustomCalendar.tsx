@@ -1,52 +1,50 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, MouseEvent } from 'react';
-import Calendar from '@toast-ui/react-calendar';
-import { theme } from '@/theme';
-import { TZDate, type EventObject, type ExternalEventTypes, type Options } from '@toast-ui/calendar';
-import { addDate, addHours, subtractDate } from './date';
+import { useCallback, useEffect, useRef, useState } from 'react'
+import type { ChangeEvent, MouseEvent } from 'react'
+import Calendar from '@toast-ui/react-calendar'
+import { theme } from '@/theme'
+import { TZDate, type EventObject, type ExternalEventTypes, type Options } from '@toast-ui/calendar'
+import { addDate, addHours, subtractDate } from './date'
 
-import '@toast-ui/calendar/dist/toastui-calendar.min.css';
+import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 
+type ViewType = 'month' | 'week' | 'day'
 
-type ViewType = 'month' | 'week' | 'day';
-
-const today = new TZDate();
+const today = new TZDate()
 const viewModeOptions = [
   {
     title: 'Monthly',
-    value: 'month',
+    value: 'month'
   },
   {
     title: 'Weekly',
-    value: 'week',
+    value: 'week'
   },
   {
     title: 'Daily',
-    value: 'day',
-  },
-];
-
+    value: 'day'
+  }
+]
 
 export default function CustomCalendar({ view }: { view: ViewType }) {
-  const calendarRef = useRef<typeof Calendar>(null);
-  const [selectedDateRangeText, setSelectedDateRangeText] = useState('');
-  const [selectedView, setSelectedView] = useState(view);
+  const calendarRef = useRef<typeof Calendar>(null)
+  const [selectedDateRangeText, setSelectedDateRangeText] = useState('')
+  const [selectedView, setSelectedView] = useState(view)
   const initialCalendars: Options['calendars'] = [
     {
       id: '0',
       name: 'Private',
       backgroundColor: '#9e5fff',
       borderColor: '#9e5fff',
-      dragBackgroundColor: '#9e5fff',
+      dragBackgroundColor: '#9e5fff'
     },
     {
       id: '1',
       name: 'Company',
       backgroundColor: '#00a9ff',
       borderColor: '#00a9ff',
-      dragBackgroundColor: '#00a9ff',
-    },
-  ];
+      dragBackgroundColor: '#00a9ff'
+    }
+  ]
   const initialEvents: Partial<EventObject>[] = [
     {
       id: '1',
@@ -54,7 +52,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       title: 'TOAST UI Calendar Study',
       category: 'time',
       start: today,
-      end: addHours(today, 3),
+      end: addHours(today, 3)
     },
     {
       id: '2',
@@ -63,7 +61,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       category: 'milestone',
       start: addDate(today, 1),
       end: addDate(today, 1),
-      isReadOnly: true,
+      isReadOnly: true
     },
     {
       id: '3',
@@ -72,7 +70,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       category: 'allday',
       start: subtractDate(today, 2),
       end: subtractDate(today, 1),
-      isReadOnly: true,
+      isReadOnly: true
     },
     {
       id: '4',
@@ -80,132 +78,131 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       title: 'Report',
       category: 'time',
       start: today,
-      end: addHours(today, 1),
-    },
-  ];
+      end: addHours(today, 1)
+    }
+  ]
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const getCalInstance = useCallback(() => calendarRef.current?.getInstance?.(), []);
-  const instance = getCalInstance()
-  
+  const getCalInstance = useCallback(() => calendarRef.current?.getInstance?.(), [])
+
   const updateRenderRangeText = useCallback(() => {
-    const calInstance = getCalInstance();
+    const calInstance = getCalInstance()
     if (!calInstance) {
-      setSelectedDateRangeText('');
+      setSelectedDateRangeText('')
     }
 
-    const viewName = calInstance.getViewName();
-    const calDate = calInstance.getDate();
-    const rangeStart = calInstance.getDateRangeStart();
-    const rangeEnd = calInstance.getDateRangeEnd();
+    const viewName = calInstance.getViewName()
+    const calDate = calInstance.getDate()
+    const rangeStart = calInstance.getDateRangeStart()
+    const rangeEnd = calInstance.getDateRangeEnd()
 
-    let year = calDate.getFullYear();
-    let month = calDate.getMonth() + 1;
-    let date = calDate.getDate();
-    let dateRangeText: string;
+    let year = calDate.getFullYear()
+    let month = calDate.getMonth() + 1
+    let date = calDate.getDate()
+    let dateRangeText: string
 
     switch (viewName) {
       case 'month': {
-        dateRangeText = `${year}-${month}`;
-        break;
+        dateRangeText = `${year}-${month}`
+        break
       }
       case 'week': {
-        year = rangeStart.getFullYear();
-        month = rangeStart.getMonth() + 1;
-        date = rangeStart.getDate();
-        const endMonth = rangeEnd.getMonth() + 1;
-        const endDate = rangeEnd.getDate();
+        year = rangeStart.getFullYear()
+        month = rangeStart.getMonth() + 1
+        date = rangeStart.getDate()
+        const endMonth = rangeEnd.getMonth() + 1
+        const endDate = rangeEnd.getDate()
 
-        const start = `${year}-${month < 10 ? '0' : ''}${month}-${date < 10 ? '0' : ''}${date}`;
+        const start = `${year}-${month < 10 ? '0' : ''}${month}-${date < 10 ? '0' : ''}${date}`
         const end = `${year}-${endMonth < 10 ? '0' : ''}${endMonth}-${
           endDate < 10 ? '0' : ''
-        }${endDate}`;
-        dateRangeText = `${start} ~ ${end}`;
-        break;
+        }${endDate}`
+        dateRangeText = `${start} ~ ${end}`
+        break
       }
       default:
-        dateRangeText = `${year}-${month}-${date}`;
+        dateRangeText = `${year}-${month}-${date}`
     }
 
-    setSelectedDateRangeText(dateRangeText);
-  }, [getCalInstance]);
+    setSelectedDateRangeText(dateRangeText)
+  }, [getCalInstance])
 
   useEffect(() => {
-    setSelectedView(view);
-  }, [view]);
+    setSelectedView(view)
+  }, [view])
 
   useEffect(() => {
-    updateRenderRangeText();
-  }, [selectedView, updateRenderRangeText]);
+    updateRenderRangeText()
+  }, [selectedView, updateRenderRangeText])
 
   const onAfterRenderEvent: ExternalEventTypes['afterRenderEvent'] = (res) => {
-    console.group('onAfterRenderEvent');
-    console.log('Event Info : ', res.title);
-    console.groupEnd();
-  };
+    console.group('onAfterRenderEvent')
+    console.log('Event Info : ', res.title)
+    console.groupEnd()
+  }
 
   const onBeforeDeleteEvent: ExternalEventTypes['beforeDeleteEvent'] = (res) => {
-    console.group('onBeforeDeleteEvent');
-    console.log('Event Info : ', res.title);
-    console.groupEnd();
+    console.group('onBeforeDeleteEvent')
+    console.log('Event Info : ', res.title)
+    console.groupEnd()
 
-    const { id, calendarId } = res;
+    const { id, calendarId } = res
 
-    getCalInstance().deleteEvent(id, calendarId);
-  };
+    getCalInstance().deleteEvent(id, calendarId)
+  }
 
   const onChangeSelect = (ev: ChangeEvent<HTMLSelectElement>) => {
-    setSelectedView(ev.target.value as ViewType);
-  };
+    setSelectedView(ev.target.value as ViewType)
+  }
 
   const onClickDayName: ExternalEventTypes['clickDayName'] = (res) => {
-    console.group('onClickDayName');
-    console.log('Date : ', res.date);
-    console.groupEnd();
-  };
+    console.group('onClickDayName')
+    console.log('Date : ', res.date)
+    console.groupEnd()
+  }
 
   const onClickNavi = (ev: MouseEvent<HTMLButtonElement>) => {
     if ((ev.target as HTMLButtonElement).tagName === 'BUTTON') {
-      const button = ev.target as HTMLButtonElement;
-      const actionName = (button.getAttribute('data-action') ?? 'month').replace('move-', '');
-      getCalInstance()[actionName]();
-      updateRenderRangeText();
+      const button = ev.target as HTMLButtonElement
+      const actionName = (button.getAttribute('data-action') ?? 'month').replace('move-', '')
+      getCalInstance()[actionName]()
+      updateRenderRangeText()
     }
-  };
+  }
 
   const onClickEvent: ExternalEventTypes['clickEvent'] = (res) => {
-    console.group('onClickEvent');
-    console.log('MouseEvent : ', res.nativeEvent);
-    console.log('Event Info : ', res.event);
-    console.groupEnd();
-  };
+    console.group('onClickEvent')
+    console.log('MouseEvent : ', res.nativeEvent)
+    console.log('Event Info : ', res.event)
+    console.groupEnd()
+  }
 
   const onClickTimezonesCollapseBtn: ExternalEventTypes['clickTimezonesCollapseBtn'] = (
     timezoneCollapsed
   ) => {
-    console.group('onClickTimezonesCollapseBtn');
-    console.log('Is Timezone Collapsed?: ', timezoneCollapsed);
-    console.groupEnd();
+    console.group('onClickTimezonesCollapseBtn')
+    console.log('Is Timezone Collapsed?: ', timezoneCollapsed)
+    console.groupEnd()
 
     const newTheme = {
       'week.daygridLeft.width': '100px',
-      'week.timegridLeft.width': '100px',
-    };
+      'week.timegridLeft.width': '100px'
+    }
 
-    getCalInstance().setTheme(newTheme);
-  };
+    getCalInstance().setTheme(newTheme)
+  }
 
   const onBeforeUpdateEvent: ExternalEventTypes['beforeUpdateEvent'] = (updateData) => {
-    console.group('onBeforeUpdateEvent');
-    console.log(updateData);
-    console.groupEnd();
+    console.group('onBeforeUpdateEvent')
+    console.log(updateData)
+    console.groupEnd()
 
-    const targetEvent = updateData.event;
-    const changes = { ...updateData.changes };
+    const targetEvent = updateData.event
+    const changes = { ...updateData.changes }
 
-    getCalInstance().updateEvent(targetEvent.id, targetEvent.calendarId, changes);
-  };
+    getCalInstance().updateEvent(targetEvent.id, targetEvent.calendarId, changes)
+  }
 
   const onBeforeCreateEvent: ExternalEventTypes['beforeCreateEvent'] = (eventData) => {
     const event = {
@@ -219,14 +216,15 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       dueDateClass: '',
       location: eventData.location,
       state: eventData.state,
-      isPrivate: eventData.isPrivate,
-    };
+      isPrivate: eventData.isPrivate
+    }
 
-    getCalInstance().createEvents([event]);
-  };
-  
-  return (<div>
+    getCalInstance().createEvents([event])
+  }
+
+  return (
     <div>
+      <div>
         <select onChange={onChangeSelect} value={selectedView}>
           {viewModeOptions.map((option, index) => (
             <option value={option.value} key={index}>
@@ -262,17 +260,20 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
         </span>
         <span className="render-range">{selectedDateRangeText}</span>
       </div>
-    <Calendar  height="900px"   defaultView= 'month' view={view}
+      <Calendar
+        height="800px"
+        defaultView="month"
+        view={selectedView}
         calendars={initialCalendars}
         month={{ startDayOfWeek: 1 }}
         events={initialEvents}
         template={{
           milestone(event) {
-            return `<span style="color: #fff; background-color: ${event.backgroundColor};">${event.title}</span>`;
+            return `<span style="color: #fff; background-color: ${event.backgroundColor};">${event.title}</span>`
           },
           allday(event) {
-            return `[All day] ${event.title}`;
-          },
+            return `[All day] ${event.title}`
+          }
         }}
         theme={theme}
         timezone={{
@@ -280,36 +281,34 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
             {
               timezoneName: 'Asia/Seoul',
               displayLabel: 'Seoul',
-              tooltip: 'UTC+09:00',
+              tooltip: 'UTC+09:00'
             },
             {
               timezoneName: 'Pacific/Guam',
               displayLabel: 'Guam',
-              tooltip: 'UTC+10:00',
-            },
-          ],
+              tooltip: 'UTC+10:00'
+            }
+          ]
         }}
         useDetailPopup={true}
         useFormPopup={true}
-        
         week={{
           showTimezoneCollapseButton: true,
           timezonesCollapsed: false,
           eventView: true,
-          taskView: true,
+          taskView: true
         }}
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  ref={calendarRef}
-  onAfterRenderEvent={onAfterRenderEvent}
-  onBeforeDeleteEvent={onBeforeDeleteEvent}
-  onClickDayname={onClickDayName}
-  onClickEvent={onClickEvent}
-  onClickTimezonesCollapseBtn={onClickTimezonesCollapseBtn}
-  onBeforeUpdateEvent={onBeforeUpdateEvent}
-  onBeforeCreateEvent={onBeforeCreateEvent}
-  />
-  </div>
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        ref={calendarRef}
+        onAfterRenderEvent={onAfterRenderEvent}
+        onBeforeDeleteEvent={onBeforeDeleteEvent}
+        onClickDayname={onClickDayName}
+        onClickEvent={onClickEvent}
+        onClickTimezonesCollapseBtn={onClickTimezonesCollapseBtn}
+        onBeforeUpdateEvent={onBeforeUpdateEvent}
+        onBeforeCreateEvent={onBeforeCreateEvent}
+      />
+    </div>
   )
-  
 }
