@@ -22,7 +22,7 @@ export async function handleAllowNotification() {
     })
     if (permission === "granted") {
       const token = await getToken(messaging, {
-        vapidKey: process.env.REACT_APP_FCM_VAPID_KEY,
+        vapidKey: import.meta.env.REACT_APP_FCM_VAPID_KEY,
       })
       if (token) {
         console.log(token)
