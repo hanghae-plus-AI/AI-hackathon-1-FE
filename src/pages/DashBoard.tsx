@@ -1,7 +1,8 @@
 import CustomCalendar from '@/components/CustomCalendar'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Report from '@/components/Report.js'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.js'
+import { useNavigate } from 'react-router-dom'
 
 export default function DashBoard() {
   const [currentTab, setCurrentTab] = useState<'calendar' | 'report'>('calendar')
@@ -11,6 +12,15 @@ export default function DashBoard() {
     }
     setCurrentTab(tab)
   }
+
+  const navigate = useNavigate()
+  useEffect(() => {
+    const userId = localStorage.getItem('cid')
+    if (!userId) {
+      navigate('/signin')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <main>
