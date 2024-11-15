@@ -12,23 +12,22 @@ self.addEventListener("activate", function (e) {
   console.log("fcm service worker가 실행되었습니다.")
 })
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FCM_API_KEY,
-  authDomain: import.meta.env.VITE_FCM_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FCM_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FCM_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FCM_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FCM_APP_ID,
-}
+const defaultConfig = {
+  apiKey: true,
+  projectId: true,
+  messagingSenderId: true,
+  appId: true,
+};
 
-const app = initializeApp(firebaseConfig)
-const messaging = firebase.messaging(app)
+const app = initializeApp(defaultConfig)
+const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage((payload) => {
-  const notificationTitle = payload.title
+  const notificationTitle = payload.notification.title;
   const notificationOptions = {
-    body: payload.body,
-    // icon: payload.icon
-  }
-  self.registration.showNotification(notificationTitle, notificationOptions)
-})
+    body: payload.notification.body,
+    icon: payload.notification.image,
+  };
+
+  self.registration.showNotification(notificationTitle, notificationOptions);
+});

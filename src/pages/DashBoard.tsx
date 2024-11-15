@@ -1,6 +1,5 @@
 import CustomCalendar from '@/components/CustomCalendar'
-import { useEffect, useState } from 'react'
-import { handleAllowNotification } from '../lib/notificationPermission.js'
+import { useState } from 'react'
 import Report from '@/components/Report.js'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs.js'
 
@@ -12,10 +11,6 @@ export default function DashBoard() {
     }
     setCurrentTab(tab)
   }
-
-  useEffect(() => {
-    handleAllowNotification()
-  }, [])
 
   return (
     <main>

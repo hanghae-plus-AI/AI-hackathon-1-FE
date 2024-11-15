@@ -1,25 +1,14 @@
-import { getToken, getMessaging, onMessage } from "firebase/messaging"
+import { getToken } from "firebase/messaging"
 
-import { app, messaging } from "./firebase.js"
+import { messaging } from "./firebase.js"
 import { registerServiceWorker } from "./registerServiceWorker.js"
 
-import "./foregroundMessage.js"
 
 export async function handleAllowNotification() {
   registerServiceWorker()
   try {
     const permission = await Notification.requestPermission()
-
-    onMessage(messaging, (payload) => {
-      const notificationTitle = payload.notification.title
-      const notificationOptions = {
-        body: payload.notification.body,
-      }
-
-      if (Notification.permission === "granted") {
-        new Notification(notificationTitle, notificationOptions)
-      }
-    })
+    
     if (permission === "granted") {
       const token = await getToken(messaging, {
         vapidKey: import.meta.env.REACT_APP_FCM_VAPID_KEY,
