@@ -43,9 +43,9 @@ export default function Signup() {
       name,
       age,
       gender,
-      workLifeRatio: `${workLifeRatio[0]}:${100 - workLifeRatio[0]}`,
+      work_life_ratio: `${workLifeRatio[0]}:${100 - workLifeRatio[0]}`,
       job,
-      furtherDetails
+      further_details:furtherDetails 
   }
     axios.post('https://koitbuddy.org/user/signup', user).then((res)=>{
       if(res.status === 200) {
