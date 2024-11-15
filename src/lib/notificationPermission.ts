@@ -3,7 +3,6 @@ import { getToken } from "firebase/messaging"
 import { messaging } from "./firebase.js"
 import { registerServiceWorker } from "./registerServiceWorker.js"
 
-import "./foregroundMessage.js"
 
 export async function handleAllowNotification() {
   registerServiceWorker()
