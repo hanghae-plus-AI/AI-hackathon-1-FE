@@ -1,40 +1,34 @@
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
-import { Textarea } from "@/components/ui/textarea"
-import axios from "axios"
+  SelectValue
+} from '@/components/ui/select'
+import { Slider } from '@/components/ui/slider'
+import { Textarea } from '@/components/ui/textarea'
+import axios from 'axios'
 
-import { FormEvent, useState } from "react"
-import { useNavigate } from "react-router-dom"
+import { FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Signup() {
-  const [id, setId] = useState("")
-  const [password, setPassword] = useState("")
-  const [name, setName] = useState("")
+  const [id, setId] = useState('')
+  const [password, setPassword] = useState('')
+  const [name, setName] = useState('')
   const [age, setAge] = useState(0)
-  const [gender, setGender] = useState("")
+  const [gender, setGender] = useState('')
   const [workLifeRatio, setWorkLifeRatio] = useState([50])
-  const [job, setJob] = useState("")
-  const [furtherDetails, setFurtherDetails] = useState("")
+  const [job, setJob] = useState('')
+  const [furtherDetails, setFurtherDetails] = useState('')
 
   const navigate = useNavigate()
-  
+
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault()
     const user = {
@@ -45,12 +39,11 @@ export default function Signup() {
       gender,
       work_life_ratio: `${workLifeRatio[0]}:${100 - workLifeRatio[0]}`,
       job,
-      further_details:furtherDetails 
-  }
-    axios.post('https://koitbuddy.org/user/signup', user).then((res)=>{
-      if(res.status === 200) {
-        localStorage.setItem('usrid', id)
-        navigate('/main')
+      further_details: furtherDetails
+    }
+    axios.post('https://koitbuddy.org/user/signup', user).then((res) => {
+      if (res.status === 200) {
+        navigate('/signin')
       }
     })
   }
@@ -63,15 +56,11 @@ export default function Signup() {
         <div className="flex flex-col gap-1">
           <form>
             <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col items-start space-y-1.5 ">
+              <div className="flex flex-col items-start space-y-1.5">
                 <Label htmlFor="id" className="text-xs">
                   아이디
                 </Label>
-                <Input
-                  id="id"
-                  value={id}
-                  onChange={(evt) => setId(evt.target.value)}
-                />
+                <Input id="id" value={id} onChange={(evt) => setId(evt.target.value)} />
               </div>
               <div className="flex flex-col items-start space-y-1.5">
                 <Label htmlFor="password" className="text-xs">
@@ -84,18 +73,14 @@ export default function Signup() {
                   onChange={(evt) => setPassword(evt.target.value)}
                 />
               </div>
-              <div className="flex flex-col items-start space-y-1.5 ">
+              <div className="flex flex-col items-start space-y-1.5">
                 <Label htmlFor="name" className="text-xs">
                   이름
                 </Label>
-                <Input
-                  id="name"
-                  value={name}
-                  onChange={(evt) => setName(evt.target.value)}
-                />
+                <Input id="name" value={name} onChange={(evt) => setName(evt.target.value)} />
               </div>
               <div className="flex flex-row gap-4">
-                <div className="flex flex-col items-start space-y-1.5 ">
+                <div className="flex flex-col items-start space-y-1.5">
                   <Label htmlFor="age" className="text-xs">
                     나이
                   </Label>
@@ -106,12 +91,9 @@ export default function Signup() {
                     onChange={(evt) => setAge(parseInt(evt.target.value))}
                   />
                 </div>
-                <div className="flex flex-col items-start space-y-1.5 ">
+                <div className="flex flex-col items-start space-y-1.5">
                   <Label className="text-xs">성별</Label>
-                  <Select
-                    value={gender}
-                    onValueChange={(val) => setGender(val)}
-                  >
+                  <Select value={gender} onValueChange={(val) => setGender(val)}>
                     <SelectTrigger className="w-[180px]">
                       <SelectValue placeholder="선택" />
                     </SelectTrigger>
@@ -124,10 +106,10 @@ export default function Signup() {
                   </Select>
                 </div>
               </div>
-              <div className="flex flex-col items-start space-y-1.5 ">
-                <div className="flex felx-row items-center gap-1">
+              <div className="flex flex-col items-start space-y-1.5">
+                <div className="felx-row flex items-center gap-1">
                   <Label className="text-xs">워라밸</Label>
-                  <span className="text-xs ">
+                  <span className="text-xs">
                     [{workLifeRatio}, {100 - workLifeRatio[0]}]
                   </span>
                 </div>
@@ -140,17 +122,13 @@ export default function Signup() {
                   }}
                 />
               </div>
-              <div className="flex flex-col items-start space-y-1.5 ">
+              <div className="flex flex-col items-start space-y-1.5">
                 <Label htmlFor="job" className="text-xs">
                   직업
                 </Label>
-                <Input
-                  id="job"
-                  value={job}
-                  onChange={(evt) => setJob(evt.target.value)}
-                />
+                <Input id="job" value={job} onChange={(evt) => setJob(evt.target.value)} />
               </div>
-              <div className="flex flex-col items-start space-y-1.5 ">
+              <div className="flex flex-col items-start space-y-1.5">
                 <Label htmlFor="furtherDetails" className="text-xs">
                   직업 설명
                 </Label>
