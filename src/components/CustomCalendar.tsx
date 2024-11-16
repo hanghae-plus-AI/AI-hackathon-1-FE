@@ -170,8 +170,47 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       state: eventData.state,
       isPrivate: eventData.isPrivate
     }
+    const customSubTasks = [
+      {
+        id: 31,
+        title: '해커톤 팀 미팅 및 아이디어 논의',
+        location: '팀 스파르타 12층',
+        type: 'work',
+        start: 1731446400000,
+        end: 1731450000000,
+        category: 'time'
+      },
+      {
+        id: 32,
+        title: '프로젝트 초기 설계 및 구조 계획',
+        location: '팀 스파르타 12층',
+        type: 'work',
+        start: 1731453600000,
+        end: 1731457200000,
+        category: 'time'
+      },
+      {
+        id: 33,
+        title: '코딩 및 개발 시작',
+        location: '팀 스파르타 12층',
+        type: 'work',
+        start: 1731460800000,
+        end: 1731468000000,
+        category: 'time'
+      },
+      {
+        id: 34,
+        title: '테스트 및 디버깅',
+        location: '팀 스파르타 12층',
+        type: 'work',
+        start: 1731471600000,
+        end: 1731475200000,
+        category: 'time'
+      }
+    ]
 
     getCalInstance().createEvents([event])
+    getCalInstance().createEvents([customSubTasks])
   }
 
   return (
