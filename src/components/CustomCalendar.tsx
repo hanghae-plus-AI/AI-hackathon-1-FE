@@ -8,6 +8,8 @@ import { addDate, addHours, subtractDate } from './date'
 import Calendar from '@toast-ui/react-calendar'
 import { theme } from '@/theme'
 import { TZDate, type EventObject, type ExternalEventTypes } from '@toast-ui/calendar'
+import { instance } from '@/service/instance'
+import { toast } from 'sonner'
 
 type ViewType = 'month' | 'week' | 'day'
 
@@ -31,43 +33,42 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
   const calendarRef = useRef<typeof Calendar>(null)
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('')
   const [selectedView, setSelectedView] = useState(view)
-  // const [events, setEvents] = useState<Partial<EventObject>[]>([])
+  const [events, setEvents] = useState<Partial<EventObject>[]>([])
+  // const initialEvents: Partial<EventObject>[] = [
+  //   {
+  //     id: '1',
+  //     calendarId: 'work',
+  //     title: 'TOAST UI Calendar Study',
+  //     category: 'time',
+  //     start: today,
+  //     end: addHours(today, 3)
+  //   },
+  //   {
+  //     id: '2',
+  //     calendarId: 'life',
+  //     title: 'Practice',
+  //     category: 'milestone',
+  //     start: addDate(today, 1),
+  //     end: addDate(today, 1)
+  //   },
+  //   {
+  //     id: '3',
+  //     calendarId: 'work',
+  //     title: 'FE Workshop',
+  //     category: 'allday',
+  //     start: subtractDate(today, 2),
+  //     end: subtractDate(today, 1)
+  //   },
 
-  const initialEvents: Partial<EventObject>[] = [
-    {
-      id: '1',
-      calendarId: 'work',
-      title: 'TOAST UI Calendar Study',
-      category: 'time',
-      start: today,
-      end: addHours(today, 3)
-    },
-    {
-      id: '2',
-      calendarId: 'life',
-      title: 'Practice',
-      category: 'milestone',
-      start: addDate(today, 1),
-      end: addDate(today, 1)
-    },
-    {
-      id: '3',
-      calendarId: 'work',
-      title: 'FE Workshop',
-      category: 'allday',
-      start: subtractDate(today, 2),
-      end: subtractDate(today, 1)
-    },
-
-    {
-      id: '4',
-      calendarId: 'life',
-      title: 'Report',
-      category: 'time',
-      start: today,
-      end: addHours(today, 1)
-    }
-  ]
+  //   {
+  //     id: '4',
+  //     calendarId: 'life',
+  //     title: 'Report',
+  //     category: 'time',
+  //     start: today,
+  //     end: addHours(today, 1)
+  //   }
+  // ]
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -194,7 +195,6 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
     getCalInstance().updateEvent(targetEvent.id, targetEvent.calendarId, changes)
   }
 
-  // TODO: 등록 API + sonner success
   const onBeforeCreateEvent: ExternalEventTypes['beforeCreateEvent'] = (eventData) => {
     const event = {
       calendarId: eventData.calendarId || '',
@@ -209,10 +209,22 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       isPrivate: eventData.isPrivate
     }
 
-    getCalInstance().createEvents([event])
+    instance
+      .post('/task', {
+        type: 'work',
+        title: event.title,
+        body: 'test',
+        start: new TZDate(event.start).getTime(),
+        end: new TZDate(event.end).getTime()
+      })
+      .then(() => {
+        toast.success('저장하였습니다.')
+        getCalInstance().createEvents([event])
+      })
+      .catch(() => {
+        toast.error('일정 저장에 실패하였습니다.')
+      })
   }
-
-  useEffect(() => {}, [])
 
   return (
     <div>
@@ -275,7 +287,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
         defaultView="month"
         view={selectedView}
         month={{ startDayOfWeek: 1 }}
-        events={initialEvents}
+        events={events}
         template={{
           milestone(event) {
             return `<span style="color: #fff; background-color: ${event.backgroundColor};">${event.title}</span>`
