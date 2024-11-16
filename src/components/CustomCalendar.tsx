@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react'
 import type { MouseEvent } from 'react'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 
 import Calendar from '@toast-ui/react-calendar'
 import { theme } from '@/theme'
-import { TZDate, type EventObject, type ExternalEventTypes } from '@toast-ui/calendar'
-import { instance } from '@/service/instance'
-import { toast } from 'sonner'
+import { type EventObject, type ExternalEventTypes } from '@toast-ui/calendar'
+import { Card } from '@/components/ui/card'
+import { tasks } from '@/const/task'
 
 type ViewType = 'month' | 'week' | 'day'
 
@@ -30,7 +30,7 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
   const calendarRef = useRef<typeof Calendar>(null)
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('')
   const [selectedView, setSelectedView] = useState(view)
-  const [events, setEvents] = useState<Partial<EventObject>[]>([])
+  const [events, setEvents] = useState<Partial<EventObject>[]>(tasks)
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -171,71 +171,69 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
       isPrivate: eventData.isPrivate
     }
 
-    instance
-      .post('/task', {
-        type: 'work',
-        title: event.title,
-        body: 'test',
-        start: new TZDate(event.start).getTime(),
-        end: new TZDate(event.end).getTime()
-      })
-      .then(() => {
-        toast.success('저장하였습니다.')
-        getCalInstance().createEvents([event])
-      })
-      .catch(() => {
-        toast.error('일정 저장에 실패하였습니다.')
-      })
+    getCalInstance().createEvents([event])
   }
 
   return (
-    <div>
-      <div>
+    <Card className="p-6">
+      <div className="mb-6 space-y-6">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <span className="render-range">{selectedDateRangeText}</span>
-            <span>
+          {/* 날짜 네비게이션 섹션 */}
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <CalendarIcon className="h-5 w-5 text-gray-500" />
+              <span className="text-lg font-semibold text-gray-700">{selectedDateRangeText}</span>
+            </div>
+            <div className="flex items-center space-x-1">
               <button
                 type="button"
-                className="move-prev bg-white"
+                className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
                 data-action="move-prev"
                 onClick={onClickNavi}
               >
-                <ChevronLeft />
+                <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 type="button"
-                className="move-next bg-white"
+                className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
                 data-action="move-next"
                 onClick={onClickNavi}
               >
-                <ChevronRight />
+                <ChevronRight className="h-5 w-5" />
               </button>
-            </span>
+            </div>
           </div>
-          <div className="flex items-center justify-center">
-            {viewModeOptions.map((option, index) => (
-              <div
-                key={index}
-                className={`${selectedView === option.value ? 'bg-sub-blue text-white' : 'text-black'} rounded-sm border text-center`}
-              >
-                <label htmlFor={option.value} className="mx-4 my-2">
-                  <input
-                    id={option.value}
-                    type="radio"
-                    name="viewMode"
-                    className="sr-only"
-                    value={option.value}
-                    checked={selectedView === option.value}
-                    onChange={(event) => onChangeSelect(event)}
-                  />
-                  {option.title}
-                </label>
-              </div>
-            ))}
+
+          {/* 뷰 모드 선택 섹션 */}
+          <div className="flex items-center space-x-2">
+            <div className="flex rounded-lg bg-gray-100 p-1">
+              {viewModeOptions.map((option, index) => (
+                <div key={index} className="relative">
+                  <label
+                    htmlFor={option.value}
+                    className={`cursor-pointer px-4 py-2 text-sm font-medium transition-colors ${
+                      selectedView === option.value
+                        ? 'rounded-md bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    } `}
+                  >
+                    <input
+                      id={option.value}
+                      type="radio"
+                      name="viewMode"
+                      className="sr-only"
+                      value={option.value}
+                      checked={selectedView === option.value}
+                      onChange={onChangeSelect}
+                    />
+                    {option.title}
+                  </label>
+                </div>
+              ))}
+            </div>
             <button
               type="button"
-              className="move-today btn flex items-center justify-center rounded-sm border bg-white"
+              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
               data-action="move-today"
               onClick={onClickNavi}
             >
@@ -244,49 +242,53 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
           </div>
         </div>
       </div>
-      <Calendar
-        height="800px"
-        defaultView="month"
-        view={selectedView}
-        month={{ startDayOfWeek: 1 }}
-        events={events}
-        template={{
-          milestone(event) {
-            return `<span style="color: #fff; background-color: ${event.backgroundColor};">${event.title}</span>`
-          },
-          allday(event) {
-            return `[All day] ${event.title}`
-          }
-        }}
-        theme={theme}
-        timezone={{
-          zones: [
-            {
-              timezoneName: 'Asia/Seoul',
-              displayLabel: 'Seoul',
-              tooltip: 'UTC+09:00'
+
+      {/* 캘린더 컴포넌트 */}
+      <div className="rounded-lg border">
+        <Calendar
+          height="800px"
+          defaultView="month"
+          view={selectedView}
+          month={{ startDayOfWeek: 1 }}
+          events={events}
+          template={{
+            milestone(event) {
+              return `<span style="color: #fff; background-color: ${event.backgroundColor};">${event.title}</span>`
+            },
+            allday(event) {
+              return `[All day] ${event.title}`
             }
-          ]
-        }}
-        useDetailPopup={true}
-        useFormPopup={true}
-        week={{
-          showTimezoneCollapseButton: true,
-          timezonesCollapsed: false,
-          eventView: true,
-          taskView: true
-        }}
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        ref={calendarRef}
-        onAfterRenderEvent={onAfterRenderEvent}
-        onBeforeDeleteEvent={onBeforeDeleteEvent}
-        onClickDayname={onClickDayName}
-        onClickEvent={onClickEvent}
-        onClickTimezonesCollapseBtn={onClickTimezonesCollapseBtn}
-        onBeforeUpdateEvent={onBeforeUpdateEvent}
-        onBeforeCreateEvent={onBeforeCreateEvent}
-      />
-    </div>
+          }}
+          theme={theme}
+          timezone={{
+            zones: [
+              {
+                timezoneName: 'Asia/Seoul',
+                displayLabel: 'Seoul',
+                tooltip: 'UTC+09:00'
+              }
+            ]
+          }}
+          useDetailPopup={true}
+          useFormPopup={true}
+          week={{
+            showTimezoneCollapseButton: true,
+            timezonesCollapsed: false,
+            eventView: true,
+            taskView: true
+          }}
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          ref={calendarRef}
+          onAfterRenderEvent={onAfterRenderEvent}
+          onBeforeDeleteEvent={onBeforeDeleteEvent}
+          onClickDayname={onClickDayName}
+          onClickEvent={onClickEvent}
+          onClickTimezonesCollapseBtn={onClickTimezonesCollapseBtn}
+          onBeforeUpdateEvent={onBeforeUpdateEvent}
+          onBeforeCreateEvent={onBeforeCreateEvent}
+        />
+      </div>
+    </Card>
   )
 }

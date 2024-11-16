@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartOptions } from 'chart.js'
-import { Clock, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Clock, Sparkles, ChevronLeft, ChevronRight, CalendarIcon } from 'lucide-react'
 import { format, setHours, setMilliseconds, setMinutes, setSeconds } from 'date-fns'
 
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
@@ -23,7 +23,7 @@ export default function Report() {
       job: '학생',
       gender: '남자',
       furtherDetails: 'AI 교육과정 수강생',
-      preferTask: '',
+      preferTask: 'AI 프로젝트 개발',
       WLBscore: '50'
     }
   }
@@ -108,37 +108,45 @@ export default function Report() {
     }
   }
 
+  // TODO: currentDate가 업데이트 될 때 마다 값을 새로 불러오기
+  useEffect(() => {}, [currentDate])
+
   return (
     <div className="w-full space-y-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center">
-          <span className="render-range">{format(currentDate, 'yyyy년 MM월 dd일')}</span>
-          <span>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2">
+            <CalendarIcon className="h-5 w-5 text-gray-500" />
+            <span className="text-lg font-semibold text-gray-700">
+              {format(currentDate, 'yyyy년 MM월 dd일')}
+            </span>
+          </div>
+          <div className="flex items-center space-x-1">
             <button
               type="button"
-              className="move-prev bg-white"
+              className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
               data-action="move-prev"
               onClick={() => onClickNavi('prev')}
             >
-              <ChevronLeft />
+              <ChevronLeft className="h-5 w-5" />
             </button>
             <button
               type="button"
-              className="move-next bg-white"
+              className="rounded-lg p-2 text-gray-600 hover:bg-gray-100"
               data-action="move-next"
               onClick={() => onClickNavi('next')}
             >
-              <ChevronRight />
+              <ChevronRight className="h-5 w-5" />
             </button>
-          </span>
-          <button
-            type="button"
-            className="move-today btn flex items-center justify-center rounded-sm border bg-white"
-            data-action="move-today"
-            onClick={() => onClickNavi('today')}
-          >
-            오늘
-          </button>
+            <button
+              type="button"
+              className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              data-action="move-today"
+              onClick={() => onClickNavi('today')}
+            >
+              오늘
+            </button>
+          </div>
         </div>
       </div>
       <Card>
