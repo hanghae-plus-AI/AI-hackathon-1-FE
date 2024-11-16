@@ -12,22 +12,17 @@ self.addEventListener("activate", function (e) {
   console.log("fcm service worker가 실행되었습니다.")
 })
 
-const defaultConfig = {
-  apiKey: true,
-  projectId: true,
-  messagingSenderId: true,
-  appId: true,
-};
 
-const app = initializeApp(defaultConfig)
+
 const messaging = firebase.messaging();
-
+// Customize background notification handling here
 messaging.onBackgroundMessage((payload) => {
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
-    icon: payload.notification.image,
   };
+
+  const noti = new Notification
 
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
