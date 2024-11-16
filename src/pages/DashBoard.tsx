@@ -40,7 +40,7 @@ export default function DashBoard() {
           </TabsList>
         </Tabs>
       </header>
-      <section className="w-[1200px] pb-10 pt-10">
+      <section className="min-w-[1200px] pb-10 pt-10">
         {{ calendar: <CustomCalendar view="month" />, report: <Report /> }[currentTab]}
       </section>
     </main>

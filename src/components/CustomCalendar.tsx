@@ -3,8 +3,6 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import type { MouseEvent } from 'react'
 import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 
-import { addDate, addHours, subtractDate } from './date'
-
 import Calendar from '@toast-ui/react-calendar'
 import { theme } from '@/theme'
 import { TZDate, type EventObject, type ExternalEventTypes } from '@toast-ui/calendar'
@@ -13,7 +11,6 @@ import { toast } from 'sonner'
 
 type ViewType = 'month' | 'week' | 'day'
 
-const today = new TZDate()
 const viewModeOptions = [
   {
     title: '월',
@@ -34,41 +31,6 @@ export default function CustomCalendar({ view }: { view: ViewType }) {
   const [selectedDateRangeText, setSelectedDateRangeText] = useState('')
   const [selectedView, setSelectedView] = useState(view)
   const [events, setEvents] = useState<Partial<EventObject>[]>([])
-  // const initialEvents: Partial<EventObject>[] = [
-  //   {
-  //     id: '1',
-  //     calendarId: 'work',
-  //     title: 'TOAST UI Calendar Study',
-  //     category: 'time',
-  //     start: today,
-  //     end: addHours(today, 3)
-  //   },
-  //   {
-  //     id: '2',
-  //     calendarId: 'life',
-  //     title: 'Practice',
-  //     category: 'milestone',
-  //     start: addDate(today, 1),
-  //     end: addDate(today, 1)
-  //   },
-  //   {
-  //     id: '3',
-  //     calendarId: 'work',
-  //     title: 'FE Workshop',
-  //     category: 'allday',
-  //     start: subtractDate(today, 2),
-  //     end: subtractDate(today, 1)
-  //   },
-
-  //   {
-  //     id: '4',
-  //     calendarId: 'life',
-  //     title: 'Report',
-  //     category: 'time',
-  //     start: today,
-  //     end: addHours(today, 1)
-  //   }
-  // ]
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
